@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Counter App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f7f9;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        #counter-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+            min-height: 1.2em; /* Prevents layout shift */
+        }
+        #increment-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            width: 100%;
+        }
+        #increment-btn:hover {
+            background-color: #218838;
+        }
+        #increment-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Static Counter</h1>
+        <div id="counter-value">0</div>
+        <button id="increment-btn">Increment</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const counterElement = document.getElementById('counter-value');
+            const incrementButton = document.getElementById('increment-btn');
+
+            // Initialize counter value from text content (which is '0' initially)
+            let count = parseInt(counterElement.textContent, 10);
+
+            if (isNaN(count)) {
+                count = 0;
+                counterElement.textContent = count;
+            }
+
+            function incrementCounter() {
+                count++;
+                counterElement.textContent = count;
+            }
+
+            // Attach the event listener
+            incrementButton.addEventListener('click', incrementCounter);
+
+            // Note: URL parameters handling is not required by the brief's core functionality 
+            // (which is just incrementing a counter), but if it were required, 
+            // logic would go here using URLSearchParams.
+        });
+    </script>
+
+</body>
+</html>
