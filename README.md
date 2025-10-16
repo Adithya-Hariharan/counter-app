@@ -1,3 +1,3 @@
-# counter-app
-
-Generated application for counter-app
+bash
+    git clone https://github.com/Adithya-Hariharan/counter-app.git
+    cd counter-app
