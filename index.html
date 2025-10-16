@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Counter App</title>
+    <title>Advanced Counter App</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -11,80 +11,181 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f4f7f9;
+            background-color: #e9ecef; /* Slightly lighter background */
             margin: 0;
         }
         .container {
             background-color: #ffffff;
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             text-align: center;
-            width: 300px;
+            width: 350px;
         }
         h1 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            color: #212529;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            font-weight: 600;
         }
         #counter-value {
-            font-size: 3em;
-            font-weight: bold;
+            font-size: 4.5em;
+            font-weight: 700;
             color: #007bff;
-            margin: 20px 0;
-            min-height: 1.2em; /* Prevents layout shift */
+            margin: 30px 0;
+            min-height: 1.2em;
+            transition: color 0.3s, transform 0.1s;
+        }
+        .button-group {
+            display: grid;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        button {
+            border: none;
+            padding: 14px 20px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            width: 100%;
+            font-weight: 500;
+        }
+        button:active {
+            transform: scale(0.98);
         }
         #increment-btn {
-            background-color: #28a745;
+            background-color: #28a745; /* Green */
             color: white;
-            border: none;
-            padding: 12px 25px;
-            font-size: 1.1em;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            width: 100%;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
         }
         #increment-btn:hover {
             background-color: #218838;
         }
-        #increment-btn:active {
-            transform: scale(0.98);
+        #decrement-btn {
+            background-color: #dc3545; /* Red */
+            color: white;
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
+        #decrement-btn:hover {
+            background-color: #c82333;
+        }
+        #reset-btn {
+            background-color: #6c757d; /* Gray */
+            color: white;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.3);
+        }
+        #reset-btn:hover {
+            background-color: #5a6268;
+        }
+        /* Layout for buttons */
+        .main-action {
+            grid-area: inc;
+        }
+        .secondary-actions {
+            display: flex;
+            gap: 10px;
+            grid-area: dec_res;
+        }
+        .button-group {
+            display: grid;
+            grid-template-areas: 
+                "inc"
+                "dec_res";
+        }
+        #decrement-btn, #reset-btn {
+            flex-grow: 1;
+            padding: 12px 10px;
+            font-size: 1em;
+        }
+        @media (min-width: 500px) {
+            .button-group {
+                grid-template-areas: "inc" "dec res";
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            #increment-btn { grid-area: inc; }
+            #decrement-btn { grid-area: dec; }
+            #reset-btn { grid-area: res; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Static Counter</h1>
+        <h1>Interactive Counter</h1>
         <div id="counter-value">0</div>
-        <button id="increment-btn">Increment</button>
+        
+        <div class="button-group">
+            <button id="increment-btn" class="main-action">Increment (+1)</button>
+            <button id="decrement-btn">Decrement (-1)</button>
+            <button id="reset-btn">Reset (0)</button>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const counterElement = document.getElementById('counter-value');
             const incrementButton = document.getElementById('increment-btn');
+            const decrementButton = document.getElementById('decrement-btn');
+            const resetButton = document.getElementById('reset-btn');
 
-            // Initialize counter value from text content (which is '0' initially)
+            // --- Initialization ---
             let count = parseInt(counterElement.textContent, 10);
 
             if (isNaN(count)) {
                 count = 0;
                 counterElement.textContent = count;
             }
+            
+            // --- URL Parameter Handling (As per requirement 4, though not strictly necessary for core logic) ---
+            // Check for URL parameters, though we won't use them to set the initial count unless specified.
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('initial')) {
+                const initialValue = parseInt(urlParams.get('initial'), 10);
+                if (!isNaN(initialValue)) {
+                    count = initialValue;
+                    counterElement.textContent = count;
+                }
+            }
+
+
+            // --- Core Functions ---
+            function updateDisplay() {
+                counterElement.textContent = count;
+                
+                // Visual feedback for zero
+                if (count === 0) {
+                    counterElement.style.color = '#007bff';
+                } else if (count > 0) {
+                    counterElement.style.color = '#28a745'; // Green for positive
+                } else {
+                    counterElement.style.color = '#dc3545'; // Red for negative
+                }
+            }
 
             function incrementCounter() {
                 count++;
-                counterElement.textContent = count;
+                updateDisplay();
             }
 
-            // Attach the event listener
-            incrementButton.addEventListener('click', incrementCounter);
+            function decrementCounter() {
+                count--;
+                updateDisplay();
+            }
 
-            // Note: URL parameters handling is not required by the brief's core functionality 
-            // (which is just incrementing a counter), but if it were required, 
-            // logic would go here using URLSearchParams.
+            function resetCounter() {
+                count = 0;
+                updateDisplay();
+            }
+
+            // --- Event Listeners ---
+            incrementButton.addEventListener('click', incrementCounter);
+            decrementButton.addEventListener('click', decrementCounter);
+            resetButton.addEventListener('click', resetCounter);
+
+            // Initial display update (in case URL parameter was used)
+            updateDisplay();
         });
     </script>
 
