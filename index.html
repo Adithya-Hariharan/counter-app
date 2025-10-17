@@ -6,68 +6,80 @@
     <title>Increment Counter</title>
     <style>
         :root {
-            --primary-bg: #f0f2f5;
-            --container-bg: #ffffff;
-            --text-color: #1c1e21;
-            --button-bg: #007bff;
-            --button-hover-bg: #0056b3;
-            --button-text: #ffffff;
+            --background-color: #f0f2f5;
+            --container-color: #ffffff;
+            --primary-text-color: #1c1e21;
+            --secondary-text-color: #606770;
+            --button-bg-color: #0866ff;
+            --button-hover-bg-color: #005ce6;
             --border-color: #dddfe2;
             --shadow-color: rgba(0, 0, 0, 0.1);
         }
 
+        html {
+            box-sizing: border-box;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
-            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            background-color: var(--background-color);
+            color: var(--primary-text-color);
         }
 
         .container {
-            background-color: var(--container-bg);
-            padding: 2rem 3rem;
+            text-align: center;
+            padding: 2.5rem;
+            background-color: var(--container-color);
             border-radius: 8px;
             box-shadow: 0 4px 12px var(--shadow-color);
-            text-align: center;
             border: 1px solid var(--border-color);
         }
 
         h1 {
-            font-size: 1.75rem;
             margin-top: 0;
-            margin-bottom: 1rem;
-            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--secondary-text-color);
+            margin-bottom: 2rem;
         }
 
         #counter-value {
+            display: block;
             font-size: 4rem;
             font-weight: 700;
-            margin: 1.5rem 0;
-            display: block;
-            color: var(--button-bg);
+            margin-bottom: 2rem;
+            color: var(--button-bg-color);
         }
 
         #increment-btn {
-            background-color: var(--button-bg);
-            color: var(--button-text);
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: var(--button-bg-color);
             border: none;
             border-radius: 6px;
             padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease;
+            transition: background-color 0.2s ease-in-out;
+            min-width: 150px;
         }
 
         #increment-btn:hover {
-            background-color: var(--button-hover-bg);
+            background-color: var(--button-hover-bg-color);
         }
-        
+
         #increment-btn:active {
             transform: scale(0.98);
         }
@@ -77,6 +89,7 @@
 
     <div class="container">
         <h1>Counter</h1>
+        <p>Click the button to increase the number.</p>
         <span id="counter-value">0</span>
         <button id="increment-btn">Increment</button>
     </div>
@@ -84,17 +97,17 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const counterValueElement = document.getElementById('counter-value');
-            const incrementButton = document.getElementById('increment-btn');
+            const incrementBtn = document.getElementById('increment-btn');
 
-            if (counterValueElement && incrementButton) {
+            if (counterValueElement && incrementBtn) {
                 let count = parseInt(counterValueElement.textContent, 10) || 0;
 
-                incrementButton.addEventListener('click', () => {
+                incrementBtn.addEventListener('click', () => {
                     count++;
                     counterValueElement.textContent = count;
                 });
             } else {
-                console.error("Required elements #counter-value or #increment-btn not found.");
+                console.error('Required elements #counter-value or #increment-btn not found.');
             }
         });
     </script>
