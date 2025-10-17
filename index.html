@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Increment Counter</title>
+    <title>Counter Application</title>
     <style>
         :root {
-            --background-color: #f0f2f5;
-            --text-color: #1c1e21;
-            --primary-color: #007bff;
-            --primary-hover-color: #0056b3;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --primary-color: #0d6efd;
+            --primary-hover-color: #0b5ed7;
+            --danger-color: #dc3545;
+            --danger-hover-color: #bb2d3b;
+            --secondary-color: #6c757d;
+            --secondary-hover-color: #5c636a;
             --container-bg: #ffffff;
-            --border-color: #ddd;
+            --border-color: #dee2e6;
+            --counter-color: #0d6efd;
         }
 
         html, body {
@@ -32,48 +37,85 @@
         main {
             text-align: center;
             background-color: var(--container-bg);
-            padding: 2.5rem 3rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem 3.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 400px;
         }
 
         h1 {
             margin-top: 0;
             margin-bottom: 1rem;
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 600;
             color: var(--text-color);
         }
 
         #counter-value {
             display: block;
-            font-size: 5rem;
+            font-size: 6rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
+            margin-bottom: 2rem;
+            color: var(--counter-color);
+            transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
         }
 
-        #increment-btn {
-            font-size: 1rem;
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-size: 1.1rem;
             font-weight: 600;
             padding: 0.75rem 1.5rem;
             border-radius: 8px;
             border: none;
-            background-color: var(--primary-color);
             color: white;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            transition: background-color 0.2s ease, transform 0.1s ease;
             user-select: none;
+            flex-grow: 1;
+            min-width: 80px;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        #increment-btn {
+            background-color: var(--primary-color);
         }
 
         #increment-btn:hover {
             background-color: var(--primary-hover-color);
         }
 
-        #increment-btn:active {
-            transform: scale(0.98);
+        #decrement-btn {
+            background-color: var(--danger-color);
         }
+
+        #decrement-btn:hover {
+            background-color: var(--danger-hover-color);
+        }
+
+        #reset-btn {
+            background-color: var(--secondary-color);
+            flex-grow: 2; /* Make reset button wider if space allows */
+        }
+
+        #reset-btn:hover {
+            background-color: var(--secondary-hover-color);
+        }
+        
+        .value-updated {
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body>
@@ -81,20 +123,51 @@
     <main>
         <h1>Counter</h1>
         <span id="counter-value">0</span>
-        <button id="increment-btn">Increment</button>
+        <div class="button-group">
+            <button id="decrement-btn" aria-label="Decrement value">-1</button>
+            <button id="reset-btn" aria-label="Reset value">Reset</button>
+            <button id="increment-btn" aria-label="Increment value">+1</button>
+        </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const counterValueElement = document.querySelector("#counter-value");
             const incrementButton = document.querySelector("#increment-btn");
+            const decrementButton = document.querySelector("#decrement-btn");
+            const resetButton = document.querySelector("#reset-btn");
 
-            if (incrementButton && counterValueElement) {
+            let count = 0;
+
+            const updateDisplay = () => {
+                if (!counterValueElement) return;
+                counterValueElement.textContent = count;
+                
+                // Visual feedback on change
+                counterValueElement.classList.add('value-updated');
+                setTimeout(() => {
+                    counterValueElement.classList.remove('value-updated');
+                }, 200);
+            };
+
+            if (incrementButton) {
                 incrementButton.addEventListener("click", () => {
-                    const currentValue = parseInt(counterValueElement.textContent, 10);
-                    if (!isNaN(currentValue)) {
-                        counterValueElement.textContent = currentValue + 1;
-                    }
+                    count++;
+                    updateDisplay();
+                });
+            }
+
+            if (decrementButton) {
+                decrementButton.addEventListener("click", () => {
+                    count--;
+                    updateDisplay();
+                });
+            }
+
+            if (resetButton) {
+                resetButton.addEventListener("click", () => {
+                    count = 0;
+                    updateDisplay();
                 });
             }
         });
